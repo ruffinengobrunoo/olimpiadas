@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/admin.css">
+    <title>DeportesBLIT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="rutadelogo" type="image/x-icon">
+</head>
+<body>
+    <nav class="nav--admin">
+        <a href="paginaprincipal.html" class="nav--admin__logo-link"><img class="logo" src="assets/logo.png" alt="">Pagina principal</a>
+        <ul class="nav--admin__ul">
+            <a href="../js/admin/cuenta.html" class="nav--admin__a"><!--en el archivo de ***** salia un # al inicio no se porque (borrar este comentario) -->
+                <li class="nav--admin__li">Ver cuenta</li>
+            </a>
+            <a href=../js/admin/pedidospendientes.html class="nav--admin__a"><!--en el archivo de ***** salia un # al inicio no se porque (borrar este comentario) -->
+                <li class="nav--admin__li">Ver pedidos pendientes</li>
+            </a>
+            <a href="../js/admin/productos.html" class="nav--admin__a"><!--en el archivo de ***** salia un # al inicio no se porque (borrar este comentario) -->
+                <li class="nav--admin__li">productos</li>
+            </a>
+        </ul>
+    </nav>
+
+    <main class="main">
+        <!-- Contenido de la página de administrador -->
+         <img src="/olimpiadas-main/DeportesBLIT/img/banner.png" alt="">
+    </main>
+
+    <script>
+        if (!document.cookie.includes('token=authenticated')) {
+            window.location.href = "login.html";  // Redirect to login if not authenticated
+        }
+    </script>
+
+    <script type="module" src="js/adminRouter.mjs"></script>
+</body>
+</html>

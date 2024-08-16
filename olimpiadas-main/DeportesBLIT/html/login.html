@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/admin.css">
+    <title>Admin Login - DeportesBLIT</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Acceso de Administrador</h1>
+        <form id="loginForm" action="/login" method="POST">
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required />
+    
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required />
+    
+            <button type="submit">Ingresar</button>
+        </form>
+        <div id="error" style="color: red; display: none;">Contraseña incorrecta</div>
+    </div>
+    
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const correctPassword = 'admin123';  // Reemplaza con la contraseña real
+
+            if (password === correctPassword) {
+                document.cookie = "token=authenticated";  // Set cookie
+                window.location.href = "admin.html";  // Redirect to admin page
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
