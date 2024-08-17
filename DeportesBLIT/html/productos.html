@@ -8,17 +8,20 @@
 </head>
 <body>
 
-    <header>
+    <header id="header">
         <div class="top-bar">
             <nav class="nav">
                 <ul>
                     <li><a href="paginaprincipal.html">Inicio</a></li>
                 </ul>    
             </nav>
+             <div>
+                <img id="carrito" class="carrito" src="../img/carrito-de-compras.png" alt="">
+                <div id="numero"></div>
+            </div>
             <div class="search-cart">
                 <input type="text" placeholder="Buscar...">
                 <a href="#" class="search-icon">🔍</a>
-                <a href="#" class="cart-icon">🛒</a>
                 <a href="login.html" class="">👤</a>
             </div>
         </div>
@@ -47,7 +50,6 @@
             <div class="product-buttons"> 
             </div>
         </div>
-    
     </section>
     
     <!-- Sección de equipos -->
@@ -90,7 +92,22 @@
     </section>
 
     <div class="products">
-        <h3>Aca van los productos</h3>
+        <main>
+            <div id="contenedor" class="contenedor"> </div>
+        </main>
+        
+        <div id="contenedorCompra">
+            <div class="informacionCompra" id="informacionCompra">
+                <h2>Cesta</h2>
+                <p class="x" id="x">x</p>
+            </div>
+    
+            <div class="productosCompra" id="productosCompra"></div>
+            <div class="total" id="total"></div>
+            <button>Finalizar Compra</button>
+        </div>
+    
+        <script src="../js/main.js"></script>
     </div>
 
     <section class="team-selection">
