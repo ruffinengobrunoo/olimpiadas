@@ -122,17 +122,17 @@ body {
 
 /* Aplica fondos específicos a cada sección */
 .seccion_futbol {
-    background-image: url('/DeportesBLIT/img/futbol.jpg');
+    background-image: url('/DeportesBLIT/img/elegirDeporte/futbol.jpg');
     background-color: red; /* Color de respaldo */
 }
 
 .seccion_basquet {
-    background-image: url('/DeportesBLIT/img/basquet.jpg');
+    background-image: url('/DeportesBLIT/img/elegirDeporte/basquet.jpg');
     background-color: lightblue; /* Color de respaldo */
 }
 
 .seccion_voley {
-    background-image: url('/DeportesBLIT/img/voley.jpg');
+    background-image: url('/DeportesBLIT/img/elegirDeporte/voley.jpg');
     background-color: green; /* Color de respaldo */
 }
 
