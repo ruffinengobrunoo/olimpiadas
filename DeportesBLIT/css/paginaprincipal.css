@@ -19,6 +19,7 @@ body {
     align-items: center;
     padding: 20px 20px;
     background-color: #AE946D;
+    
 }
 
 .nav ul {
@@ -26,6 +27,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    
 }
 
 .nav ul li {
@@ -34,12 +36,16 @@ body {
 
 .nav ul li a {
     text-decoration: none;
+    font-family: Arial, sans-serif;
     color: #fff;
 }
-
-.search-cart {
-    display: flex;
-    align-items: center;
+.carrito{
+    filter: invert(100%);
+    width: 45px;
+    height: auto;
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
 }
 
 .search-cart input[type="text"] {
@@ -122,17 +128,17 @@ body {
 
 /* Aplica fondos específicos a cada sección */
 .seccion_futbol {
-    background-image: url('/DeportesBLIT/img/elegirDeporte/futbol.jpg');
+    background-image: url('../img/elegirDeporte/futbol.jpg');
     background-color: red; /* Color de respaldo */
 }
 
 .seccion_basquet {
-    background-image: url('/DeportesBLIT/img/elegirDeporte/basquet.jpg');
+        background-image: url('../img/elegirDeporte/basquet.jpg');
     background-color: lightblue; /* Color de respaldo */
 }
 
 .seccion_voley {
-    background-image: url('/DeportesBLIT/img/elegirDeporte/voley.jpg');
+    background-image: url('../img/elegirDeporte/voley.jpg');
     background-color: green; /* Color de respaldo */
 }
 
@@ -271,11 +277,13 @@ footer {
 .footer-column {
     flex: 1;
     min-width: 250px;
+    text-align: center;
 }
 
 .footer-column h3 {
     font-size: 22px;
     margin-bottom: 20px;
+    text-align: center;
     color: #AE946D; /* Color dorado para resaltar los títulos */
 }
 
@@ -284,6 +292,7 @@ footer {
     font-size: 16px;
     line-height: 1.8;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .footer-column ul {
@@ -293,12 +302,14 @@ footer {
 
 .footer-column ul li {
     margin-bottom: 10px;
+    
 }
 
 .footer-column ul li a {
     color: #ffffff;
     text-decoration: none;
     transition: color 0.3s ease;
+    
 }
 
 .footer-column ul li a:hover {
@@ -308,12 +319,14 @@ footer {
 .social-icons {
     display: flex;
     gap: 20px;
+   justify-content: center;
 }
 
 .social-icons a img {
-    width: 45px;
+    width: 40px;
     height: 40px;
     transition: transform 0.3s ease;
+    
 }
 
 .social-icons a img:hover {
