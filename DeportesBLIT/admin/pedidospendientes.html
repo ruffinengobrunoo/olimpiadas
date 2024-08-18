@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="estilospedido.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilospedido.css">
+</head>
+<body class="pedidosbody">
+    <header>
+        <ul>
+            <li><a href="../admin/admin.html"><h1>Añadir producto   </h1></a></li>
+            <li><a href="../admin/pedidospendientes.html"><h1>Ver pedidos pendientes</h1></a></li>
+        </ul>
+    </header>
+    <header>
+        <h1 class="titulo">Pedidos pendientes</h1>
+    </header>
+    <div class="secciones">
+        <h2>id_pedido</h2>
+        <h2>Nombre</h2>
+        <h2>fecha</h2>
+        <h2>articulos</h2>
+        <h2>cantidad</h2>
+        <h2>verificado</h2>
+        <h2>borrar</h2>
+     </div>
+     <div>
+        <!-- Container where the data will be inserted -->
+        <div id="pedido-container"></div>
+    </div>
+
+    <script>
+        // Sample JSON data
+        const pedidosData = [
+            {
+                "id_pedido": 1,
+                "Nombre": "Juan Pérez",
+                "fecha": "2024-08-17-12:4",
+                "articulos": "Artículo A",
+                "cantidad": 2,
+                "verificado": "<i class='fas fa-check'></i>",
+                "borrar": "<i class='fas fa-trash' data-id='1'></i>"
+            },
+            {
+                "id_pedido": 2,
+                "Nombre": "María López",
+                "fecha": "2024-08-16-23:12",
+                "articulos": "Artículo C",
+                "cantidad": 1,
+                "verificado": "<i class='fas fa-check'></i>",
+                "borrar": "<i class='fas fa-trash' data-id='2'></i>"
+            }
+            // More data can be added here
+        ];
+
+        function displayPedidos() {
+    const container = document.getElementById("pedido-container");
+    pedidosData.forEach(pedido => {
+        const pedidoDiv = document.createElement("div");
+        pedidoDiv.classList.add("pedido-item");
+        pedidoDiv.innerHTML = `
+            <h2>${pedido.id_pedido}</h2>
+            <h2>${pedido.Nombre}</h2>
+            <h2>${pedido.fecha}</h2>
+            <h2>${pedido.articulos}</h2>
+            <h2>${pedido.cantidad}</h2>
+            <h2>${pedido.verificado}</h2>
+            <h2>${pedido.borrar}</h2>
+        `;
+        container.appendChild(pedidoDiv);
+    });
+
+    // Attach event listeners to all delete icons
+    document.querySelectorAll('.fa-trash').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const idToRemove = this.getAttribute('data-id');
+            removePedido(idToRemove);
+        });
+    });
+}
+
+function removePedido(id) {
+    const container = document.getElementById("pedido-container");
+    const items = container.querySelectorAll('.pedido-item');
+    items.forEach(item => {
+        if (item.querySelector(`.fa-trash[data-id='${id}']`)) {
+            container.removeChild(item);
+        }
+    });
+}
+        // Call the function to display the data
+        displayPedidos();
+    </script>
+</body>
+</html>

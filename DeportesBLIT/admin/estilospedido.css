@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+}
+/*-------------------------------------pagina de pedidos-------------------------------------*/
+body{
+    background-color: #181818;
+    font-family: 'Space Grotesk', sans-serif;
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0; /* Espacio arriba y abajo del encabezado */
+}
+
+header ul {
+    display: flex; /* Configura el ul como un contenedor flex */
+    flex-direction: row; /* Alinea los elementos en una fila */
+    justify-content: space-around; /* Espacio igual entre los elementos */
+    margin: 0; /* Elimina el margen por defecto del ul */
+    padding: 0; /* Elimina el padding por defecto del ul */
+    list-style-type: none; /* Elimina los puntos de la lista */
+    width: 100%; /* Asegura que el ul ocupe el ancho completo del contenedor */
+}
+
+header li {
+    background-color: #AE946D; /* Color de fondo de los elementos li */
+    padding: 10px 20px; /* Espacio dentro de cada elemento li */
+    border-radius: 20px; /* Esquinas redondeadas de los elementos li */
+    margin: 0 10px; /* Espacio entre los elementos li */
+}
+
+header a {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: white; /* Color del texto de los enlaces */
+}
+
+header h1 {
+    margin: 0; /* Elimina el margen por defecto del h1 */
+    font-size: 1rem; /* Tamaño de fuente del h1 */
+    text-align: center; /* Centra el texto dentro del h1 */
+}
+.titulo{
+    margin-top: 40px;
+    background-color: #AE946D;
+    border-radius: 40px;
+    padding: 5px;
+    max-width: 1350px;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+.secciones{
+    max-width: 1350px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #AE946D;
+    border-radius: 40px;
+    padding: 10px;
+    padding-inline: 80px; 
+    margin: 0 auto;
+    margin-bottom: 5px;
+    margin-inline: 80px;
+}
+#pedido-container {
+    display: flex;
+    flex-direction: column; /* Muestra los pedidos en columnas (cada pedido en una fila) */
+    gap: 10px; /* Espacio entre filas de pedidos */
+    padding: 5px;
+    margin-inline: 80px;
+}
+
+.pedido-item {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #AE946D;
+    border-radius: 40px;
+    padding: 10px;
+    width: 100%;
+}
+
+.pedido-item h2 {
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+    flex: 1; /* Asegura que los elementos se distribuyan uniformemente */
+}
