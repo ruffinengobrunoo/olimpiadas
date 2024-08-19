@@ -15,7 +15,12 @@ body {
     align-items: center;
     padding: 20px 20px;
     background-color: #AE946D;
-    
+}
+
+.deportesblit img {
+    width: 150px; /* Ajusta el tamaño del logo según sea necesario */
+    height: auto;
+    max-height: 100px;
 }
 
 .nav ul {
@@ -23,7 +28,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    
+    align-items: center; /* Alineación vertical con el logo */
 }
 
 .nav ul li {
@@ -35,13 +40,10 @@ body {
     font-family: Arial, sans-serif;
     color: #fff;
 }
-.carrito{
-    filter: invert(100%);
-    width: 45px;
-    height: auto;
-    position: absolute;
-    top: 14px;
-    cursor: pointer;
+
+.search-cart {
+    display: flex;
+    align-items: center;
 }
 
 .search-cart input[type="text"] {
@@ -54,6 +56,15 @@ body {
     margin-left: 10px;
     color: #fff;
     text-decoration: none;
+}
+
+.carrito{
+    filter: invert(100%);
+    width: 45px;
+    height: auto;
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
 }
 h1{
     font-family: 'Montserrat', sans-serif;
