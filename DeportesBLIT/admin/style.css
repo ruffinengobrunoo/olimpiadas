@@ -131,7 +131,7 @@ textarea{
     padding-bottom: 20px;
     font-weight: 300;
     font-size: 40px;
-    color: #141C29;
+    color: #ffffff;
 }
 
 .mostrarProductos {
@@ -146,7 +146,7 @@ textarea{
 
 .mostrarProductos>div {
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-    background-color: #181714;
+    background-color: #ffffff;
     border-radius: 20px;
 }
 
@@ -157,6 +157,7 @@ textarea{
     align-items: center;
     flex-direction: column;
     gap: 15px;
+    color: black;
 }
 
 .informacion>p:first-child {
