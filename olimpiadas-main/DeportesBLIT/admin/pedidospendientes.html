@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos pendientes</title>
+    <link rel="stylesheet" href="estilospedido.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="pedidosbody">
+    <header>
+        <ul>
+            <li><a href="../admin/admin.html"><h1>Productos</h1></a></li>
+            <li><a href="../admin/tablahistorica.html"><h1>Tabla Historica</h1></a></li>
+        </ul>
+    </header>
+    <header>
+        <h1 class="titulo">Pedidos pendientes</h1>
+    </header>
+    <div class="secciones">
+        <h2>id_pedido</h2>
+        <h2>Nombre</h2>
+        <h2>fecha</h2>
+        <h2>articulos</h2>
+        <h2>cantidad</h2>
+        <h2>Realizado</h2>
+        <h2>borrar</h2>
+     </div>
+     <div>
+        <!-- Container where the data will be inserted -->
+        <div id="pedido-container"></div>
+    </div>
+
+    <script>
+// Sample JSON data
+const pedidosData = [
+    {
+        "id_pedido": 1,
+        "Nombre": "Juan Pérez",
+        "fecha": "2024-08-17-12:4",
+        "articulos": "Artículo A",
+        "cantidad": 2,
+        "verificado": "<i class='fas fa-check' data-id='1'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='1'></i>"
+    },
+    {
+        "id_pedido": 2,
+        "Nombre": "María López",
+        "fecha": "2024-08-16-23:12",
+        "articulos": "Artículo C",
+        "cantidad": 1,
+        "verificado": "<i class='fas fa-check' data-id='2'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='2'></i>"
+    },
+    {
+        "id_pedido": 3,
+        "Nombre": "Toreto",
+        "fecha": "2024-08-16-23:12",
+        "articulos": "Artículo A",
+        "cantidad": 2,
+        "verificado": "<i class='fas fa-check' data-id='3'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='3'></i>"
+    },
+    {
+        "id_pedido": 4,
+        "Nombre": "Son Goku",
+        "fecha": "2024-08-16-23:12",
+        "articulos": "Artículo B",
+        "cantidad": 10,
+        "verificado": "<i class='fas fa-check' data-id='4'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='4'></i>"
+    },
+    {
+        "id_pedido": 5,
+        "Nombre": "Wei Wuxian",
+        "fecha": "2024-08-16-23:12",
+        "articulos": "Artículo B",
+        "cantidad": 10,
+        "verificado": "<i class='fas fa-check' data-id='5'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='5'></i>"
+    },
+    {
+        "id_pedido": 6,
+        "Nombre": "Margot Robbie",
+        "fecha": "2024-08-16-23:12",
+        "articulos": "Artículo C",
+        "cantidad": 2,
+        "verificado": "<i class='fas fa-check' data-id='6'></i>",
+        "borrar": "<i class='fas fa-trash' data-id='6'></i>"
+    }
+    // More data can be added here
+];
+
+function displayPedidos() {
+    const container = document.getElementById("pedido-container");
+    pedidosData.forEach(pedido => {
+        const pedidoDiv = document.createElement("div");
+        pedidoDiv.classList.add("pedido-item");
+        pedidoDiv.innerHTML = `
+            <h2>${pedido.id_pedido}</h2>
+            <h2>${pedido.Nombre}</h2>
+            <h2>${pedido.fecha}</h2>
+            <h2>${pedido.articulos}</h2>
+            <h2>${pedido.cantidad}</h2>
+            <h2>${pedido.verificado}</h2>
+            <h2>${pedido.borrar}</h2>
+        `;
+        container.appendChild(pedidoDiv);
+    });
+
+    // Attach event listeners to all delete icons
+    document.querySelectorAll('.fa-trash').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const idToRemove = this.getAttribute('data-id');
+            removePedido(idToRemove);
+        });
+    });
+
+    // Attach event listeners to all check icons
+    document.querySelectorAll('.fa-check').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const idToVerify = this.getAttribute('data-id');
+            moveToHistorical(idToVerify);
+        });
+    });
+}
+
+function removePedido(id) {
+    const container = document.getElementById("pedido-container");
+    const items = container.querySelectorAll('.pedido-item');
+    items.forEach(item => {
+        if (item.querySelector(`.fa-trash[data-id='${id}']`)) {
+            container.removeChild(item);
+        }
+    });
+}
+
+function moveToHistorical(id) {
+    const pedido = pedidosData.find(p => p.id_pedido == id);
+    if (pedido) {
+        // Store the verified pedido in localStorage
+        let historicalData = JSON.parse(localStorage.getItem('historicalData')) || [];
+        historicalData.push(pedido);
+        localStorage.setItem('historicalData', JSON.stringify(historicalData));
+
+        // Remove the pedido from the current list
+        removePedido(id);
+    }
+}
+
+// Call the function to display the data
+displayPedidos();
+    </script>
+</body>
+</html>

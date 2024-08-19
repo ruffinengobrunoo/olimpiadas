@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <button id="openModalBtn">Efectuar Compra</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <!-- Imágenes de los bancos -->
+            <div>
+                <img src="../img/metodospago/paypal.png" alt="Banco 1" class="bank-logo">
+                <img src="../img/metodospago/visa.png" alt="Banco 2" class="bank-logo">
+                <img src="../img/metodospago/mastercard.png" alt="Banco 3" class="bank-logo">
+            </div>
+
+            <!-- Formulario para ingresar datos -->
+            <form id="purchaseForm">
+                <input type="text" id="buyerName" name="buyerName" placeholder="Nombre del comprador" required>
+                <input type="text" id="accountNumber" name="accountNumber" placeholder="Número de targeta" required>
+                <select id="bankName" name="bankName" required>
+                    <option value="" disabled selected>Seleccione su banco</option>
+                    <option value="Banco 1">paypal</option>
+                    <option value="Banco 2">visa</option>
+                    <option value="Banco 3">mastercard</option>
+                </select>
+
+                <!-- Grupo para fecha de vencimiento y CVV -->
+                <div class="input-group">
+                    <input type="text" id="expiryDate" name="expiryDate" placeholder="Fecha de vencimiento (MM/AA)" required>
+                    <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
+                </div>
+
+                <button type="submit">Confirmar Compra</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("openModalBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const form = document.getElementById("purchaseForm");
+
+        btn.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            const buyerName = document.getElementById("buyerName").value;
+            const accountNumber = document.getElementById("accountNumber").value;
+            const bankName = document.getElementById("bankName").value;
+            const expiryDate = document.getElementById("expiryDate").value;
+            const cvv = document.getElementById("cvv").value;
+
+            alert(`Compra confirmada:\nNombre: ${buyerName}\nCuenta: ${accountNumber}\nBanco: ${bankName}\nFecha de Vencimiento: ${expiryDate}\nCVV: ${cvv}`);
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
