@@ -17,7 +17,7 @@
                 <h2 class="title">BIENVENIDO</h2>
                 <?php
                 include("db.php");
-                include("controlarLOGIN.php");
+                include("controlarLOGINuser.php");
                 ?>
                 <div class="input-div one">
                     <div class="i">
@@ -25,7 +25,7 @@
                     </div>
                     <div>
                         <h5>Usuario</h5>
-                        <input type="text" class="input" name="usuario">
+                        <input type="text" class="input" name="username">
                     </div>
                 </div>
                 <div class="input-div pass">
