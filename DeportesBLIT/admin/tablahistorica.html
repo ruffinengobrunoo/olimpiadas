@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilospedido.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Tabla Historica</title>
+</head>
+<body class="pedidosbody">
+    <header>
+        <ul>
+            <li><a href="../admin/admin.html"><h1>Productos</h1></a></li>
+            <li><a href="../admin/pedidospendientes.html"><h1>Pedidos pendientes</h1></a></li>
+        </ul>
+    </header>
+    <header>
+        <h1 class="titulo">Pedidos pendientes</h1>
+    </header>
+    <div class="secciones">
+        <h2>id_pedido</h2>
+        <h2>Nombre</h2>
+        <h2>fecha</h2>
+        <h2>articulos</h2>
+        <h2>cantidad</h2>
+        <h2>borrar</h2>
+     </div>
+     <div>
+        <!-- Container where the data will be inserted -->
+        <div id="pedido-container"></div>
+    </div>
+
+    <script>
+    function displayHistorical() {
+        const container = document.getElementById("pedido-container");
+        let historicalData = JSON.parse(localStorage.getItem('historicalData')) || [];
+
+        historicalData.forEach(pedido => {
+            const pedidoDiv = document.createElement("div");
+            pedidoDiv.classList.add("pedido-item");
+            pedidoDiv.innerHTML = `
+                <h2>${pedido.id_pedido}</h2>
+                <h2>${pedido.Nombre}</h2>
+                <h2>${pedido.fecha}</h2>
+                <h2>${pedido.articulos}</h2>
+                <h2>${pedido.cantidad}</h2>
+                <h2><i class='fas fa-trash' data-id='${pedido.id_pedido}'></i></h2>
+            `;
+            container.appendChild(pedidoDiv);
+        });
+
+        // Attach event listeners to all delete icons in historical
+        document.querySelectorAll('.fa-trash').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const idToRemove = this.getAttribute('data-id');
+                removeHistorical(idToRemove);
+            });
+        });
+    }
+
+    function removeHistorical(id) {
+        let historicalData = JSON.parse(localStorage.getItem('historicalData')) || [];
+        historicalData = historicalData.filter(p => p.id_pedido != id);
+        localStorage.setItem('historicalData', JSON.stringify(historicalData));
+        
+        // Reload the historical data after removal
+        const container = document.getElementById("pedido-container");
+        container.innerHTML = '';
+        displayHistorical();
+    }
+
+    // Call the function to display the historical data
+    displayHistorical();
+    </script>
+</body>
+</html>
