@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
 <?php
 include 'db.php';
 
@@ -13,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Ejecutar la consulta y comprobar si fue exitosa
     if ($stmt->execute()) {
-        echo "Registro exitoso. <a href='loginusuario.php'>Iniciar sesión</a>";
+        echo '<div class="registro">';
+        echo "Registro exitoso. <br> <a href='loginusuario.php'>Iniciar sesión</a>";
+        echo '</div>';
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -23,3 +33,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close();
 }
 ?>
+
+<style>
+
+body{
+    background-color: black;
+}
+
+.registro{
+    margin:auto;
+    background-color: black;
+    justify-content: center;
+    color: white;
+    text-align:center;
+    font-size: 30px;
+    margin-top: 10%;
+}
+a{
+    color: white;
+}
+
+</style>
+
+</body>
+</html>
