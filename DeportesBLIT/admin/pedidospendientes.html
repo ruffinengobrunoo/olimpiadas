@@ -11,8 +11,8 @@
 <body class="pedidosbody">
     <header>
         <ul>
-            <li><a href="../admin/admin.html"><h1>Añadir producto   </h1></a></li>
-            <li><a href="../admin/pedidospendientes.html"><h1>Ver pedidos pendientes</h1></a></li>
+            <li><a href="../admin/admin.html"><h1>Productos</h1></a></li>
+            <li><a href="../admin/tablahistorica.html"><h1>Tabla Histórica</h1></a></li>
         </ul>
     </header>
     <header>
@@ -67,13 +67,21 @@
             <h2>${pedido.fecha}</h2>
             <h2>${pedido.articulos}</h2>
             <h2>${pedido.cantidad}</h2>
-            <h2>${pedido.verificado}</h2>
-            <h2>${pedido.borrar}</h2>
+            <h2><i class='fas fa-check' data-id='${pedido.id_pedido}'></i></h2>
+            <h2><i class='fas fa-trash' data-id='${pedido.id_pedido}'></i></h2>
         `;
         container.appendChild(pedidoDiv);
     });
 
-    // Attach event listeners to all delete icons
+    // Asociar eventos a los íconos de verificación (fa-check)
+    document.querySelectorAll('.fa-check').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const idToVerify = this.getAttribute('data-id');
+            movePedidoToHistorical(idToVerify);
+        });
+    });
+
+    // Asociar eventos a los íconos de eliminar (fa-trash)
     document.querySelectorAll('.fa-trash').forEach(icon => {
         icon.addEventListener('click', function() {
             const idToRemove = this.getAttribute('data-id');
@@ -82,17 +90,42 @@
     });
 }
 
+function movePedidoToHistorical(id) {
+    // Buscar el pedido por ID
+    const pedido = pedidosData.find(p => p.id_pedido == id);
+
+    if (pedido) {
+        // Obtener datos históricos del localStorage
+        let historicalData = JSON.parse(localStorage.getItem('historicalData')) || [];
+
+        // Añadir el pedido a los datos históricos
+        historicalData.push(pedido);
+
+        // Guardar los datos actualizados en localStorage
+        localStorage.setItem('historicalData', JSON.stringify(historicalData));
+
+        // Remover el pedido de la lista de pendientes
+        removePedido(id);
+    }
+}
+
 function removePedido(id) {
+    // Eliminar el pedido de la pantalla
     const container = document.getElementById("pedido-container");
     const items = container.querySelectorAll('.pedido-item');
     items.forEach(item => {
-        if (item.querySelector(`.fa-trash[data-id='${id}']`)) {
+        if (item.querySelector(`.fa-trash[data-id='${id}']`) || item.querySelector(`.fa-check[data-id='${id}']`)) {
             container.removeChild(item);
         }
     });
+
+    // Actualizar pedidosData para eliminar el pedido
+    pedidosData = pedidosData.filter(p => p.id_pedido != id);
 }
-        // Call the function to display the data
-        displayPedidos();
+
+// Llamar a la función para mostrar los datos
+displayPedidos();
+
     </script>
 </body>
 </html>
