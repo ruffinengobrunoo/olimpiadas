@@ -9,7 +9,7 @@
 <body>
 
     <div class="container">
-    <a href="paginaprincipal.html">
+    <a href="../../index.html">
                 <img src="../img/logo/logoHEADER.jpeg" alt="Logo">
     </a>
         <div class="login-content">
