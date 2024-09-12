@@ -685,4 +685,8 @@ footer {
         .modal button:hover {
             background-color: #45a049;
         }
+
+        .filtro{
+            display: none;
+        }
 /**/

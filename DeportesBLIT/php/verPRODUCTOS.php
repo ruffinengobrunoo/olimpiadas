@@ -1,14 +1,30 @@
+<?php
+// Conexión a la base de datos
+include 'db.php'; // Asegúrate de tener este archivo configurado para la conexión a la base de datos
+
+// Función para obtener los productos
+function getProducts($conn) {
+    $result = $conn->query("SELECT nombre, precio, descripcion, imagen FROM articulos");
+    $products = [];
+    while ($row = $result->fetch_assoc()) {
+        $products[] = $row;
+    }
+    return $products;
+}
+
+$products = getProducts($conn); // Obtener productos para mostrar
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="../css/productos.css"> <!-- Incluye aquí tu archivo CSS -->
     <link rel="icon" href="DeportesBLIT/img/logo/favicon.jpg" type="image/x-icon">
-
-    <title>Categorías</title>
-    <link rel="stylesheet" href="../css/productos.css">
     <style>
-        /* Estilo del fondo oscuro */
+        /* Estilo del modal */
         .modal {
             display: none;
             position: fixed;
@@ -22,7 +38,6 @@
             align-items: center;
         }
 
-        /* Estilo de la caja del contenido */
         .modal-content {
             background-color: #fff;
             padding: 20px;
@@ -39,14 +54,12 @@
             cursor: pointer;
         }
 
-        /* Estilo de las imágenes de los bancos */
         .bank-logo {
             width: 60px;
             height: 60px;
             margin: 10px;
         }
 
-        /* Estilo de los campos del formulario */
         .modal input, .modal select {
             width: 100%;
             padding: 10px;
@@ -72,13 +85,12 @@
 </head>
 <body>
 
-    <header id="header">
-
-        <div class="deportesblit">
-            <a href="../../index.html">
-                <img src="../img/logo/logoHEADER.jpeg" alt="Logo">
-            </a>
-        </div>
+<header id="header">
+    <div class="deportesblit">
+        <a href="../../index.html">
+            <img src="../img/logo/logoHEADER.jpeg" alt="Logo">
+        </a>
+    </div>
 
     <div class="nav">
         <ul>
@@ -89,22 +101,18 @@
     </div>
 
     <div class="search-cart">
-        <input type="text" placeholder="Buscar...">
+        <input type="text" id="buscador" placeholder="Buscar...">
         <a href="#" class="search-icon">🔍</a>
         <a href="../php/loginusuario.php" class="">👤</a>
 
         <div>
-            <img id="carrito" class="carrito" src="../img/carrito-de-compras.png" alt="">
+            <img id="carrito" class="carrito" src="../img/carrito-de-compras.png" alt="Carrito">
             <div id="numero"></div>
         </div>
-        
     </div>
+</header>
 
-</div>
-
-    </header>
-
-    <section class="category-section">
+<section class="category-section">
         <h2>TUS PRODUCTOS FAVORITOS EN TU LUGAR FAVORITO</h2>
         <br>
         <h2>MAS COMPRADOS</h2>
@@ -168,93 +176,108 @@
 
     </section>
 
-    <div class="products">
-        <main>
-            <div id="contenedor" class="contenedor"> </div>
-        </main>
-        
-        <div id="contenedorCompra">
-            <div class="informacionCompra" id="informacionCompra">
-                <h2>Cesta</h2>
-                <p class="x" id="x">x</p>
-            </div>
-    
-            <div class="productosCompra" id="productosCompra"></div>
-            <div class="total" id="total"></div>
-            <button id="openModalBtn">Efectuar Compra</button>
-
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-        
-                    <!-- Imágenes de los bancos -->
-                    <div>
-                        <img src="../img/metodospago/paypal.png" alt="Banco 1" class="bank-logo">
-                        <img src="../img/metodospago/visa.png" alt="Banco 2" class="bank-logo">
-                        <img src="../img/metodospago/mastercard.png" alt="Banco 3" class="bank-logo">
-                    </div>
-        
-                    <!-- Formulario para ingresar datos -->
-                    <form id="purchaseForm">
-                        <input type="text" id="buyerName" name="buyerName" placeholder="Nombre del comprador" required>
-                        <input type="text" id="accountNumber" name="accountNumber" placeholder="Número de targeta" required>
-                        <select id="bankName" name="bankName" required>
-                            <option value="" disabled selected>Seleccione su banco</option>
-                            <option value="Banco 1">paypal</option>
-                            <option value="Banco 2">visa</option>
-                            <option value="Banco 3">mastercard</option>
-                        </select>
-        
-                        <!-- Grupo para fecha de vencimiento y CVV -->
-                        <div class="input-group">
-                            <input type="text" id="expiryDate" name="expiryDate" placeholder="Fecha de vencimiento (MM/AA)" required>
-                            <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
-                        </div>
-        
-                        <button type="submit">Confirmar Compra</button>
-                    </form>
-                </div>
-            </div>
-        
-            <script>
-                const modal = document.getElementById("myModal");
-                const btn = document.getElementById("openModalBtn");
-                const span = document.getElementsByClassName("close")[0];
-                const form = document.getElementById("purchaseForm");
-        
-                btn.onclick = function() {
-                    modal.style.display = "flex";
-                }
-        
-                span.onclick = function() {
-                    modal.style.display = "none";
-                }
-        
-                window.onclick = function(event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-        
-                form.onsubmit = function(event) {
-                    event.preventDefault();
-                    const buyerName = document.getElementById("buyerName").value;
-                    const accountNumber = document.getElementById("accountNumber").value;
-                    const bankName = document.getElementById("bankName").value;
-                    const expiryDate = document.getElementById("expiryDate").value;
-                    const cvv = document.getElementById("cvv").value;
-        
-                    alert(`Compra confirmada:\nNombre: ${buyerName}\nCuenta: ${accountNumber}\nBanco: ${bankName}\nFecha de Vencimiento: ${expiryDate}\nCVV: ${cvv}`);
-                    modal.style.display = "none";
-                }
-            </script>
+<!-- Sección de imágenes con título y descripción -->
+<section class="catalog-preview">
+ 
+    <?php if (!empty($products)): ?>
+        <?php foreach ($products as $product): ?>
+        <div class="catalog-item articulof" >
+            <img src="<?= $product['imagen']; ?>" alt="<?= $product['nombre']; ?>" class="catalog-img">
+            <h3><?= $product['nombre']; ?></h3>
+            <p><?= $product['descripcion']; ?></p>
+            <p>Precio: $<?= number_format($product['precio'], 2); ?></p>
         </div>
-    
-     
-    </div>
-    
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No hay productos disponibles.</p>
+    <?php endif; ?>
+</section>
 
-    <section class="team-selection">
+    <!-- CARRITO
+
+<div class="products"> 
+    <main>
+        <div id="contenedor" class="contenedor"></div>
+    </main>
+
+    <div id="contenedorCompra">
+        <div class="informacionCompra" id="informacionCompra">
+            <h2>Cesta</h2>
+            <p class="x" id="x">x</p>
+        </div>
+
+        <div class="productosCompra" id="productosCompra"></div>
+        <div class="total" id="total"></div>
+        <button id="openModalBtn">Efectuar Compra</button>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+
+                <div>
+                    <img src="../img/metodospago/paypal.png" alt="Banco 1" class="bank-logo">
+                    <img src="../img/metodospago/visa.png" alt="Banco 2" class="bank-logo">
+                    <img src="../img/metodospago/mastercard.png" alt="Banco 3" class="bank-logo">
+                </div>
+
+                <form id="purchaseForm">
+                    <input type="text" id="buyerName" name="buyerName" placeholder="Nombre del comprador" required>
+                    <input type="text" id="accountNumber" name="accountNumber" placeholder="Número de tarjeta" required>
+                    <select id="bankName" name="bankName" required>
+                        <option value="" disabled selected>Seleccione su banco</option>
+                        <option value="paypal">Paypal</option>
+                        <option value="visa">Visa</option>
+                        <option value="mastercard">Mastercard</option>
+                    </select>
+
+                    <div class="input-group">
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="Fecha de vencimiento (MM/AA)" required>
+                        <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
+                    </div>
+
+                    <button type="submit">Confirmar Compra</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    -->
+
+<script>
+    const modal = document.getElementById("myModal");
+    const btn = document.getElementById("openModalBtn");
+    const span = document.getElementsByClassName("close")[0];
+    const form = document.getElementById("purchaseForm");
+
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        const buyerName = document.getElementById("buyerName").value;
+        const accountNumber = document.getElementById("accountNumber").value;
+        const bankName = document.getElementById("bankName").value;
+        const expiryDate = document.getElementById("expiryDate").value;
+        const cvv = document.getElementById("cvv").value;
+
+        alert(`Compra confirmada:\nNombre: ${buyerName}\nCuenta: ${accountNumber}\nBanco: ${bankName}\nFecha de Vencimiento: ${expiryDate}\nCVV: ${cvv}`);
+        modal.style.display = "none";
+    }
+</script>
+
+
+<section class="team-selection">
         <h2>ENCONTRÁ A TU EQUIPO</h2>
         <div class="team-logos">
             <img src="../img/descubremujeres/mina1.png" alt="mina1" class="team-logo">
@@ -290,38 +313,36 @@
     </section>
 
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>Sobre Nosotros</h3>
-                <p>DeportesBLIT es tu tienda deportiva de confianza, ofreciendo la mejor selección de productos para cada disciplina. Nuestra misión es inspirar y equipar a los atletas de todos los niveles.</p>
-            </div>
-            <div class="footer-column">
-                <h3>Enlaces Rápidos</h3>
-                <ul>
-                    <li><a href="../../index.html">Inicio</a></li>
-                    <li><a href="productos.html">Tienda</a></li>
-                    <li><a href="nosotros.html">Contacto</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Contacto</h3>
-                <p><strong>Dirección:</strong> Avenida Siempre Viva 742, Springfield</p>
-                <p><strong>Teléfono:</strong> +123 456 789</p>
-                <p><strong>Email:</strong> contacto@deportesblit.com</p>
-            </div>
-            <div class="footer-column">
-                <h3>Redes Sociales</h3>
-                <div class="social-icons">
-                    <a href="#"><img src="../img/redes/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="../img/redes/instagram.png" alt="Instagram"></a>
-                    <a href="#"><img src="../img/redes/twitter.png" alt="Twitter"></a>
-                </div>
+<footer>
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>Sobre Nosotros</h3>
+            <p>DeportesBLIT es tu tienda deportiva de confianza, ofreciendo la mejor selección de productos para cada disciplina. Nuestra misión es inspirar y equipar a los atletas de todos los niveles.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Enlaces Rápidos</h3>
+            <ul>
+                <li><a href="../../index.html">Inicio</a></li>
+                <li><a href="productos.html">Tienda</a></li>
+                <li><a href="nosotros.html">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contacto</h3>
+            <p><strong>Dirección:</strong> Avenida Siempre Viva 742, Springfield</p>
+            <p><strong>Teléfono:</strong> +123 456 789</p>
+            <p><strong>Email:</strong> contacto@deportesblit.com</p>
+        </div>
+        <div class="footer-column">
+            <h3>Redes Sociales</h3>
+            <div class="social-icons">
+                <a href="#"><img src="../img/redes/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="../img/redes/instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="../img/redes/twitter.png" alt="Twitter"></a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 DeportesBLIT. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    </div>
+    <script src="filtro.js"></script>
+</footer>
 </body>
 </html>

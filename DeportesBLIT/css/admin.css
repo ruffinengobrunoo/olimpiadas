@@ -1,53 +1,78 @@
-/* admin.css */
-
 body {
     font-family: 'Mulish', sans-serif;
     background-color: #181818;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Alinea el contenido de arriba a abajo */
     align-items: center;
     height: 100vh;
     margin: 0;
 }
 
-.login-container {
-    background-color: white;
+.container {
+    display: flex;
+    justify-content: flex-start; /* Alinea las cajas en una fila */
+    max-width: 1200px;
+    width: 100%;
+}
+
+.box {
+    background-color: #AE946D;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.login-container h1 {
-    margin-bottom: 20px;
-}
-
-.login-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-.login-container input[type="text"],
-.login-container input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.login-container button {
-    background-color: #B99972;
+    border-radius: 10px;
+    width: 30%; /* Cada caja ocupa el 30% de la fila */
     color: white;
-    padding: 10px 15px;
-    border: none;
+    min-height: 400px;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 20px; /* Añade un pequeño espacio entre los elementos si es necesario */
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, textarea, select, button {
+    margin-bottom: 10px;
+    padding: 10px;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    background-color: #181818;
+    color: white;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+/* Estilos para los enlaces */
+header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Espacio entre el header y las cajas */
     width: 100%;
 }
 
-.login-container button:hover {
-    background-color: #A7855C;
+.header-links {
+    background-color: #AE946D;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
 }
 
+.header-links:hover {
+    background-color: #8E754A;
+}
