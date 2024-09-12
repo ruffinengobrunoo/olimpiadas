@@ -92,52 +92,58 @@ $conn->close(); // Cerrar la conexión después de todas las operaciones
 <head>
     <meta charset="UTF-8">
     <title>Administrar Productos</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Incluye aquí tu archivo CSS -->
+    <link rel="stylesheet" href="../css/admin.css"> <!-- Incluye aquí tu archivo CSS -->
 </head>
 <body>
 
-<div>
-    <h2>Añadir Producto</h2>
-    <form method="POST" action="">
-        <input type="text" name="nombre" placeholder="Nombre del producto" required>
-        <input type="number" step="0.01" name="precio" placeholder="Precio del producto" required>
-        <textarea name="descripcion" placeholder="Descripción" required></textarea>
-        <input type="number" name="stock" placeholder="Stock" required>
-        <input type="text" name="imagen" placeholder="URL de la imagen" required>
-        <button type="submit" name="add">Añadir</button>
-    </form>
-</div>
-<!-- Formulario para Editar Producto -->
-<div>
-    <h2>Editar</h2>
-    <form method="POST" action="">
-        <select name="id_articulo">
-            <?php foreach ($products as $product): ?>
-                <option value="<?= $product['id_articulo'] ?>"><?= $product['nombre'] ?></option>
-            <?php endforeach; ?>
-        </select>
-        <select name="atributo">
-            <option value="precio">Precio</option>
-            <option value="descripcion">Descripción</option>
-            <option value="stock">Stock</option>
-            <option value="imagen">Imagen</option>
-        </select>
-        <input type="text" name="nuevo_valor" placeholder="Nuevo valor" required>
-        <button type="submit" name="edit">Editar</button>
-    </form>
-</div>
+<header>
+    <a href="../admin/pedidospendientes.html" class="header-links">Pedidos pendientes</a>
+    <a href="../admin/tablahistorica.html" class="header-links">Tabla histórica</a>
+</header>
 
-<!-- Formulario para Eliminar Producto -->
-<div>
-    <h2>Eliminar</h2>
-    <form method="POST" action="">
-        <select name="id_articulo">
-            <?php foreach ($products as $product): ?>
-                <option value="<?= $product['id_articulo'] ?>"><?= $product['nombre'] ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit" name="delete">Eliminar</button>
-    </form>
+<div class="container">
+    <div class="box añadir">
+        <h2>Añadir Producto</h2>
+        <form method="POST" action="">
+            <input type="text" name="nombre" placeholder="Nombre del producto" required>
+            <input type="number" step="0.01" name="precio" placeholder="Precio del producto" required>
+            <textarea name="descripcion" placeholder="Descripción" required></textarea>
+            <input type="number" name="stock" placeholder="Stock" required>
+            <input type="text" name="imagen" placeholder="URL de la imagen" required>
+            <button type="submit" name="add">Añadir</button>
+        </form>
+    </div>
+
+    <div class="box editar">
+        <h2>Editar</h2>
+        <form method="POST" action="">
+            <select name="id_articulo">
+                <?php foreach ($products as $product): ?>
+                    <option value="<?= $product['id_articulo'] ?>"><?= $product['nombre'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select name="atributo">
+                <option value="precio">Precio</option>
+                <option value="descripcion">Descripción</option>
+                <option value="stock">Stock</option>
+                <option value="imagen">Imagen</option>
+            </select>
+            <input type="text" name="nuevo_valor" placeholder="Nuevo valor" required>
+            <button type="submit" name="edit">Editar</button>
+        </form>
+    </div>
+
+    <div class="box eliminar">
+        <h2>Eliminar</h2>
+        <form method="POST" action="">
+            <select name="id_articulo">
+                <?php foreach ($products as $product): ?>
+                    <option value="<?= $product['id_articulo'] ?>"><?= $product['nombre'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" name="delete">Eliminar</button>
+        </form>
+    </div>
 </div>
 
 </body>
