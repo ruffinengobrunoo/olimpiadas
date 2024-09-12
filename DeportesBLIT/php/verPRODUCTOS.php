@@ -101,7 +101,7 @@ $products = getProducts($conn); // Obtener productos para mostrar
     </div>
 
     <div class="search-cart">
-        <input type="text" placeholder="Buscar...">
+        <input type="text" id="buscador" placeholder="Buscar...">
         <a href="#" class="search-icon">🔍</a>
         <a href="../php/loginusuario.php" class="">👤</a>
 
@@ -181,7 +181,7 @@ $products = getProducts($conn); // Obtener productos para mostrar
  
     <?php if (!empty($products)): ?>
         <?php foreach ($products as $product): ?>
-        <div class="catalog-item">
+        <div class="catalog-item articulof" >
             <img src="<?= $product['imagen']; ?>" alt="<?= $product['nombre']; ?>" class="catalog-img">
             <h3><?= $product['nombre']; ?></h3>
             <p><?= $product['descripcion']; ?></p>
@@ -342,6 +342,7 @@ $products = getProducts($conn); // Obtener productos para mostrar
             </div>
         </div>
     </div>
+    <script src="filtro.js"></script>
 </footer>
 </body>
 </html>
