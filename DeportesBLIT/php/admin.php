@@ -97,8 +97,8 @@ $conn->close(); // Cerrar la conexión después de todas las operaciones
 <body>
 
 <header>
-    <a href="../admin/pedidospendientes.html" class="header-links">Pedidos pendientes</a>
-    <a href="../admin/tablahistorica.html" class="header-links">Tabla histórica</a>
+    <a href="../php/verORDENES.php" class="header-links">Pedidos pendientes</a>
+
 </header>
 
 <div class="container">

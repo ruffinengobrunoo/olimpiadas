@@ -1,0 +1,93 @@
+/* Reset básico para eliminar márgenes y paddings por defecto */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo general del cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+/* Encabezado */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los encabezados de la tabla */
+thead th {
+    background-color: #AE946D;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Estilo para las filas de la tabla */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tbody td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Botones de acción */
+button {
+    background-color: #AE946D;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 2px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #AE946D;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Botones de rechazar */
+button[value="rechazar"] {
+    background-color: #dc3545;
+}
+
+button[value="rechazar"]:hover {
+    background-color: #c82333;
+}
+
+/* Botón de aceptar */
+button[value="aceptar"] {
+    background-color: #28a745;
+}
+
+button[value="aceptar"]:hover {
+    background-color: #218838;
+}
+
+/* Formulario para acciones */
+form {
+    display: inline;
+}

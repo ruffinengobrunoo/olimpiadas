@@ -1,10 +1,9 @@
 <?php
-// Conexión a la base de datos
-include 'db.php'; // Asegúrate de tener este archivo configurado para la conexión a la base de datos
+include 'db.php';  // Incluir archivo de conexión a la base de datos
 
 // Función para obtener los productos
 function getProducts($conn) {
-    $result = $conn->query("SELECT nombre, precio, descripcion, imagen FROM articulos");
+    $result = $conn->query("SELECT id_articulo, nombre, precio, descripcion, stock, imagen FROM articulos");
     $products = [];
     while ($row = $result->fetch_assoc()) {
         $products[] = $row;
@@ -12,8 +11,87 @@ function getProducts($conn) {
     return $products;
 }
 
-$products = getProducts($conn); // Obtener productos para mostrar
+// Manejar la solicitud POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['finalizar_compra']) && $_POST['finalizar_compra'] === 'true') {
+        // Procesar la finalización de la compra
+        $carrito = json_decode($_POST['carrito'], true); // Obtener el carrito del FormData
+
+        // Validar si el carrito no está vacío
+        if (empty($carrito)) {
+            echo json_encode(['status' => 'error', 'message' => 'El carrito está vacío.']);
+            exit;
+        }
+
+        // Calcular el total
+        $total = 0;
+        foreach ($carrito as $producto) {
+            $total += $producto['precio'] * $producto['cantidad'];
+        }
+
+        // Insertar la orden en la tabla de ordenes
+        $stmt = $conn->prepare("INSERT INTO ordenes (total) VALUES (?)");
+        $stmt->bind_param("d", $total);
+        $stmt->execute();
+        $id_orden = $stmt->insert_id; // Obtener el ID de la orden recién creada
+
+        // Insertar los detalles de la orden en la tabla de detalles_orden
+        foreach ($carrito as $producto) {
+            $id_articulo = $producto['id']; // Asegúrate de que el ID del artículo es correcto
+            $cantidad = $producto['cantidad'];
+            $precio = $producto['precio'];
+
+            // Insertar detalles de la orden
+            $stmt = $conn->prepare("INSERT INTO detalles_orden (id_orden, id_articulo, cantidad, precio) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $id_orden, $id_articulo, $cantidad, $precio);
+            $stmt->execute();
+
+            // Actualizar el stock en la tabla articulos
+            $stmt = $conn->prepare("UPDATE articulos SET stock = stock - ? WHERE id_articulo = ?");
+            $stmt->bind_param("ii", $cantidad, $id_articulo);
+            $stmt->execute();
+        }
+
+        echo json_encode(['status' => 'success', 'message' => 'Compra finalizada con éxito.']);
+        exit;
+    } elseif (isset($_POST['id_articulo']) && isset($_POST['cantidad'])) {
+        // Procesar la adición de productos al carrito
+        $id_articulo = $_POST['id_articulo'];
+        $cantidad = $_POST['cantidad'];
+
+        // Consultar el stock disponible en la base de datos
+        $query = $conn->prepare("SELECT stock FROM articulos WHERE id_articulo = ?");
+        $query->bind_param('i', $id_articulo);
+        $query->execute();
+        $result = $query->get_result();
+
+        if ($result->num_rows > 0) {
+            $producto = $result->fetch_assoc();
+            $stock_disponible = $producto['stock'];
+
+            if ($cantidad > $stock_disponible) {
+                echo json_encode(['status' => 'error', 'message' => 'No hay suficiente stock disponible.']);
+            } else {
+                echo json_encode(['status' => 'success', 'message' => 'Producto agregado al carrito.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Producto no encontrado.']);
+        }
+        exit;
+    }
+}
+
+// Obtener los productos si la solicitud no es POST
+$products = getProducts($conn);
+
+// Verificar si los productos están disponibles y enviarlos como JSON si se requiere
+if (!empty($products)) {
+    echo json_encode($products);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'No se encontraron productos.']);
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -23,67 +101,64 @@ $products = getProducts($conn); // Obtener productos para mostrar
     <title>Catálogo de Productos</title>
     <link rel="stylesheet" href="../css/productos.css"> <!-- Incluye aquí tu archivo CSS -->
     <link rel="icon" href="DeportesBLIT/img/logo/favicon.jpg" type="image/x-icon">
-    <style>
-        /* Estilo del modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 400px;
-            text-align: center;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .bank-logo {
-            width: 60px;
-            height: 60px;
-            margin: 10px;
-        }
-
-        .modal input, .modal select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .modal button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .modal button:hover {
-            background-color: #45a049;
-        }
-    </style>
+   
 </head>
 <body>
+
+<style>
+   #carrito, #abrirCarrito {
+    filter: invert(100%);
+    width: 45px;
+    height: auto;
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
+        }
+#cart {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    border-left: 2px solid #ddd;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    padding: 20px;
+    color: black;
+}
+
+.cart-container {
+    display: none; /* Asegúrate de que esté oculto inicialmente */
+    color: black;
+}
+
+.cart-open {
+    display: block; /* Muestra el carrito cuando se abre */
+
+}
+
+.close-cart {
+    cursor: pointer;
+    font-size: 20px;
+    float: right;
+    color: black;
+}
+
+.item-carrito {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    color: black;
+}
+
+.total-container {
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 20px;
+    color: black;
+}
+
+</style>
 
 <header id="header">
     <div class="deportesblit">
@@ -104,12 +179,19 @@ $products = getProducts($conn); // Obtener productos para mostrar
         <input type="text" id="buscador" placeholder="Buscar...">
         <a href="#" class="search-icon">🔍</a>
         <a href="../php/loginusuario.php" class="">👤</a>
-
-        <div>
-            <img id="carrito" class="carrito" src="../img/carrito-de-compras.png" alt="Carrito">
-            <div id="numero"></div>
-        </div>
+        
+    <div>
+    <img id="abrirCarrito" src="../img/carrito-de-compras.png" alt="Carrito" width="40">
     </div>
+    <div id="cart" class="cart-container">
+    <span class="close-cart" onclick="cerrarCarrito()">✖</span>
+    <h3>Tu Carrito</h3>
+    <div id="productosCompra"></div>
+    <div id="total" class="total-container">Total: $0.00</div>
+    <!-- Botón para finalizar compra -->
+    <button id="finalizarCompra" onclick="finalizarCompra()">Finalizar Compra</button>
+</div>
+
 </header>
 
 <section class="category-section">
@@ -177,105 +259,23 @@ $products = getProducts($conn); // Obtener productos para mostrar
     </section>
 
 <!-- Sección de imágenes con título y descripción -->
-<section class="catalog-preview">
- 
+<section class="product-section">
     <?php if (!empty($products)): ?>
         <?php foreach ($products as $product): ?>
-        <div class="catalog-item articulof" >
+        <div class="catalog-item articulof">
             <img src="<?= $product['imagen']; ?>" alt="<?= $product['nombre']; ?>" class="catalog-img">
             <h3><?= $product['nombre']; ?></h3>
             <p><?= $product['descripcion']; ?></p>
             <p>Precio: $<?= number_format($product['precio'], 2); ?></p>
-        </div>
+            <p>Stock disponible: <?= $product['stock']; ?></p>
+            <button onclick="addToCart(<?= $product['id_articulo']; ?>, '<?= $product['nombre']; ?>', <?= $product['precio']; ?>, <?= $product['stock']; ?>)">Agregar al carrito</button>
+
+   </div>
         <?php endforeach; ?>
     <?php else: ?>
         <p>No hay productos disponibles.</p>
     <?php endif; ?>
 </section>
-
-    <!-- CARRITO
-
-<div class="products"> 
-    <main>
-        <div id="contenedor" class="contenedor"></div>
-    </main>
-
-    <div id="contenedorCompra">
-        <div class="informacionCompra" id="informacionCompra">
-            <h2>Cesta</h2>
-            <p class="x" id="x">x</p>
-        </div>
-
-        <div class="productosCompra" id="productosCompra"></div>
-        <div class="total" id="total"></div>
-        <button id="openModalBtn">Efectuar Compra</button>
-
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-
-                <div>
-                    <img src="../img/metodospago/paypal.png" alt="Banco 1" class="bank-logo">
-                    <img src="../img/metodospago/visa.png" alt="Banco 2" class="bank-logo">
-                    <img src="../img/metodospago/mastercard.png" alt="Banco 3" class="bank-logo">
-                </div>
-
-                <form id="purchaseForm">
-                    <input type="text" id="buyerName" name="buyerName" placeholder="Nombre del comprador" required>
-                    <input type="text" id="accountNumber" name="accountNumber" placeholder="Número de tarjeta" required>
-                    <select id="bankName" name="bankName" required>
-                        <option value="" disabled selected>Seleccione su banco</option>
-                        <option value="paypal">Paypal</option>
-                        <option value="visa">Visa</option>
-                        <option value="mastercard">Mastercard</option>
-                    </select>
-
-                    <div class="input-group">
-                        <input type="text" id="expiryDate" name="expiryDate" placeholder="Fecha de vencimiento (MM/AA)" required>
-                        <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
-                    </div>
-
-                    <button type="submit">Confirmar Compra</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-    -->
-
-<script>
-    const modal = document.getElementById("myModal");
-    const btn = document.getElementById("openModalBtn");
-    const span = document.getElementsByClassName("close")[0];
-    const form = document.getElementById("purchaseForm");
-
-    btn.onclick = function() {
-        modal.style.display = "flex";
-    }
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    form.onsubmit = function(event) {
-        event.preventDefault();
-        const buyerName = document.getElementById("buyerName").value;
-        const accountNumber = document.getElementById("accountNumber").value;
-        const bankName = document.getElementById("bankName").value;
-        const expiryDate = document.getElementById("expiryDate").value;
-        const cvv = document.getElementById("cvv").value;
-
-        alert(`Compra confirmada:\nNombre: ${buyerName}\nCuenta: ${accountNumber}\nBanco: ${bankName}\nFecha de Vencimiento: ${expiryDate}\nCVV: ${cvv}`);
-        modal.style.display = "none";
-    }
-</script>
-
 
 <section class="team-selection">
         <h2>ENCONTRÁ A TU EQUIPO</h2>
@@ -342,7 +342,8 @@ $products = getProducts($conn); // Obtener productos para mostrar
             </div>
         </div>
     </div>
-    <script src="filtro.js"></script>
+    <script src="../js/filtro.js"></script>
+    <script src="../js/cart.js" defer></script>
 </footer>
 </body>
 </html>
